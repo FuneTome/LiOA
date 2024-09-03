@@ -1,0 +1,77 @@
+#include <iostream>
+#include <limits>
+#include <stdlib.h>
+#include <string>
+#include <locale.h>
+using namespace std;
+
+struct student {
+	string famil, name;
+	int number, age;
+}stud[3];
+
+int main() {
+	setlocale(LC_ALL, "");
+	int n;
+	cout << "Введите номер задания: ";
+	cin >> n;
+	switch (n) {
+	case 1: {
+		int min = INT_MAX, max = INT_MIN, a[10];
+		cout << "Введите массив: ";
+		for (int i = 0; i < 10; i++) {
+			cin >> a[i];
+			cout << a[i] << " ";
+			if (a[i] < min) min = a[i];
+			if (a[i] > max) max = a[i];
+		}
+		cout << endl << "Разность: " << max - min;
+	}break;
+	case 2: {
+		int a[20];
+		cout << "Заполненый массив: ";
+		for (int i = 0; i < 20; i++) {
+			a[i] = rand() % 200 - 100;
+			cout << a[i] << " ";
+		}
+	}break;
+	case 3: {
+		int m;
+		cout << "Введите количество элементов: ";
+		cin >> m;
+		int* a = new int[m];
+		cout << "Массив: ";
+		for (int i = 0; i < m; i++) {
+			a[i] = rand() % 200 - 100;
+			cout << a[i] << " ";
+		}
+		delete[] a;
+	}break;
+	case 4: {
+		int a[10][10];
+		cout << "Суммы строк: ";
+		for (int i = 0; i < 10; i++) {
+			int sum = 0;
+			for (int j = 0; j < 10; j++) {
+				a[i][j] = rand() % 200 - 100;
+				sum += a[i][j];
+			}
+			cout << sum << " ";
+		}
+	}break;
+	case 5: {
+		for (int i = 0; i < 3; i++) {
+			cin >> stud[i].famil >> stud[i].name >> stud[i].number >> stud[i].age;
+		}
+		string fam, nam;
+		int num, age, count = 0;
+		cin >> fam >> nam >> num >> age;
+		for (int i = 0; i < 3; i++) {
+			if (fam == stud[i].famil && nam == stud[i].name && num == stud[i].number && age == stud[i].age) count = i + 1;
+		}
+		if (count != 0) cout << "запись находится под номером " << count;
+		else cout << "Запись не найдена";
+	}break;
+	}
+	return 0;
+}
