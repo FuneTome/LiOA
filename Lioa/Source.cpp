@@ -1,41 +1,58 @@
-#include <iostream>
+ï»¿#include <iostream>
+#include <string>
 using namespace std;
 
 int main() {
 	setlocale(LC_ALL, "");
-	int G[6][6];
+	int G[6][6] = { 0 };
+	string mass[6];
 	srand(time(0));
-	cout << "Ìàòðèöà ñìåæíîñòè: \n\n";
+	cout << "ÐœÐ°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¸Ð½Ñ†Ð¸Ð´ÐµÐ½Ñ‚Ð½Ð¾ÑÑ‚Ð¸: \n\n";
 	for (int i = 0; i < 6; i++) {
-		for (int j = i; j < 6; j++) {
-			G[i][j] = rand() % 2;
-			G[j][i] = G[i][j];
-		}
-	}
-	for (int i = 0; i < 6; i++) {
+		int sum = 0;
 		for (int j = 0; j < 6; j++) {
-			cout << G[i][j] << " ";
-		}
-		cout << '\n';
-	}
-	cout << '\n';
-	int sum = 0;
-	for (int i = 0; i < 6; i++) {
-		for (int j = i; j < 6; j++) {
-			if (i == j) sum += G[i][j];
-			sum += G[i][j];
+			if (sum < 2)	G[j][i] = rand() % 2;
+			else G[j][i] = 0;
+			sum += G[j][i];
 		}
 	}
-	cout << "Ðàçìåð ãðàôà: " << sum << "\n";
+
+	/*for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 6; j++) {
+			mass[i] += to_string(G[j][i]);
+		}
+	}
 
 	for (int i = 0; i < 6; i++) {
-		sum = 0;
+		for (int j = i + 1; j < 6; j++) {
+			if (mass[i] == mass[j]) {
+				for (int k = 0; k < 6; k++) {
+					G[j][k] = 0;
+				}
+			}
+		}
+	}*/
+	int count = 0;
+	for (int i = 0; i < 6; i++) {
+		int sum = 0;
+		for (int j = 0; j < 6; j++) {
+			sum += G[j][i];
+			cout << G[i][j] << " ";
+		}
+		if (sum == 2) count++;
+		else if (sum == 1) count += 2; 
+		cout << '\n';
+	}
+	cout << '\n' << "Ð Ð°Ð·Ð¼ÐµÑ€ Ð³Ñ€Ð°Ñ„Ð°: " << count << "\n\n";
+	
+	for (int i = 0; i < 6; i++) {
+		int sum = 0;
 		for (int j = 0; j < 6; j++) {
 			sum += G[i][j];
 		}
-		if ((sum == 5 && G[i][i] == 0) || (sum == 6)) cout << "Âåðøèíà " << i + 1 << " ÿâëÿåòñÿ äîìèíàíòíîé\n";
-		else if (sum == 1 && G[i][i] == 0) cout << "Âåðøèíà " << i + 1 << " ÿâëÿåòñÿ êîíöåâîé\n";
-		else if ((sum == 1 && G[i][i] == 1) || (sum == 0)) cout << "Âåðøèíà " << i + 1 << " ÿâëÿåòñÿ èçîëèðîâàííîé\n";
+		if (sum >= 5) cout << "Ð’ÐµÑ€ÑˆÐ¸Ð½Ð°" << i + 1 << " ÑÐ²Ð»ÑÐµÑ‚ÑÑ Ð´Ð¾Ð¼Ð¸Ð½Ð¸Ñ€ÑƒÑŽÑ‰ÐµÐ¹\n";
+		else if (sum == 1) cout << "Ð’ÐµÑ€ÑˆÐ¸Ð½Ð° " << i + 1 << " ÑÐ²Ð»ÑÐµÑ‚ÑÑ ÐºÐ¾Ð½Ñ†ÐµÐ²Ð¾Ð¹\n";
+		else if (sum == 0) cout << "Ð’ÐµÑ€ÑˆÐ¸Ð½Ð° " << i + 1 << " ÑÐ²Ð»ÑÐµÑ‚ÑÑ Ð¸Ð·Ð¾Ð»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ð¹\n";
 	}
 	return 0;
 }
