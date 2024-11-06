@@ -32,7 +32,7 @@ struct list {
 	}
 };
 
-int** creatG(int len) {
+int** creatG(int len, double ver) {
 	int** G;
 	srand(time(0));
 	G = new int* [len];
@@ -43,7 +43,8 @@ int** creatG(int len) {
 		for (int j = i; j < len; j++) {
 			if (i == j) G[i][i] = 0;
 			else {
-				G[i][j] = rand() % 2;
+				if (rand() % 11 <= 10 * ver)	G[i][j] = 1;
+				else G[i][j] = 0;
 				G[j][i] = G[i][j];
 			}
 		}
@@ -73,6 +74,7 @@ void BFS(int v, int len, bool* num, int** G) {
 			if (G[v][i] == 1 && num[i] == false) { q.push(i); num[i] = true; }
 		}
 	}
+	cout << "\n";
 }
 
 void BFS_queue(int v, int len, bool* num, int** G) {
@@ -93,23 +95,31 @@ void BFS_queue(int v, int len, bool* num, int** G) {
 
 int main() {
 	setlocale(LC_ALL, "");
-	int** G, len;
+	int** G, len, start;
+	double ver;
 	cout << "Введите длину графа: ";
 	cin >> len;
+	cout << "Введите вероятность появления 1: ";
+	cin >> ver;
 	bool* num;
 	num = new bool[len];
 	for (int i = 0; i < len; i++) num[i] = false;
-	G = creatG(len);
-	//printG(G, len);
+	G = creatG(len, ver);
+	printG(G, len);
+	cout << "Введите вершину с которой начнется обход: ";
+	cin >> start;
 	time_t start1 = clock();
-	BFS(0, len, num, G);
+	BFS(start - 1, len, num, G);
+	for (int i = 1; i < len; i++) {
+		if(num[i] == false)	BFS(i, len, num, G);
+	}
 	time_t end1 = clock();
 	delete[]num;
 	cout << "\n";
 	num = new bool[len];
 	for (int i = 0; i < len; i++) num[i] = false;
 	time_t start2 = clock();
-	BFS_queue(0, len, num, G);
+	BFS_queue(start - 1, len, num, G);
 	time_t end2 = clock();
 	cout << "\nВремя выполнение с помощью встроенного класса: " << (end1 - start1)/1000.0; 
 	cout << "\nВремя выполнения с использованием самостоятельно реализованного метода: " << (end2 - start2) / 1000.0;
