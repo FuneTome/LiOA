@@ -100,7 +100,7 @@ void BFS_list(int v, int len, bool* num, int** G, struct list* l) {
 int main() {
 	setlocale(LC_ALL, "");
 	int** G, len;
-	cout << "Ввкдите длину графа: ";
+	cout << "Введите длину графа: ";
 	cin >> len;
 	bool* num;
 	num = new bool[len];
