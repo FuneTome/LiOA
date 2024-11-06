@@ -2,7 +2,7 @@
 #include <stack>
 using namespace std;
 
-int **creatG(int len) {
+int** creatG(int len) {
 	int** G;
 	srand(time(0));
 	G = new int* [len];
@@ -21,7 +21,7 @@ int **creatG(int len) {
 	return G;
 }
 
-void printG(int ** G, int len) {
+void printG(int** G, int len) {
 	for (int i = 0; i < len; i++) {
 		for (int j = 0; j < len; j++) {
 			cout << G[i][j] << " ";
@@ -31,8 +31,8 @@ void printG(int ** G, int len) {
 	cout << "\n";
 }
 
-bool num_empty(bool *num, int len) {
-	for (int i = 0; i < len; i++) {	if (num[i] == false) return false; } return true;
+bool num_empty(bool* num, int len) {
+	for (int i = 0; i < len; i++) { if (num[i] == false) return false; } return true;
 }
 
 int main() {
@@ -40,7 +40,7 @@ int main() {
 	int** G, len;
 	cout << "Введите длину графа: ";
 	cin >> len;
-	bool *num;
+	bool* num;
 	num = new bool[len];
 	for (int i = 0; i < len; i++) { num[i] = false; }
 	G = creatG(len);
