@@ -67,6 +67,45 @@ void printG(int** G, int len) {
 	cout << "\n";
 }
 
+void DFSD_ver(int v, int len, int* dist, int** G) {
+	stack<int> stack;
+	queue<int> q;
+	int** ver = new int* [len - 1], j = 0, k = 0;
+	for(int i = 0; i < len; i ++){ ver[i] = new int[len]; }
+	stack.push(v);
+	dist[v] = 0;
+	while (!stack.empty()) {
+		v = stack.top();
+		stack.pop();
+		q.push(v + 1);
+		for (int i = 0; i < len; i++) {
+			if (G[v][i] == 1 && dist[i] == INT_MAX) {
+				stack.push(i);
+				dist[i] = dist[v] + 1;
+				q.push(i + 1);
+				cout << "\n";
+				j = 0;
+				while (!q.empty()) {
+					k = q.back();
+					//cout << q.front() << " "; 
+					ver[k - 2][j] = q.front();
+					q.pop(); 
+					j++;
+				}
+				q.push(1);
+			}
+		}
+	}
+	for (int i = 0; i < len - 1; i++) {
+		cout << i + 2 << ": ";
+		for (int j = 0; j < len; j++) {
+			if (ver[i][j] < 0) break;
+			cout << ver[i][j] << " ";
+		}
+		cout << "\n";
+	}
+}
+
 void DFSD(int v, int len, int* dist, int** G) {
 	stack<int> stack;
 	stack.push(v);
@@ -76,7 +115,7 @@ void DFSD(int v, int len, int* dist, int** G) {
 		stack.pop();
 		cout << v + 1 << " ";
 		for (int i = 0; i < len; i++) {
-			if (G[v][i] == 1 && dist[i] == -1) {
+			if (G[v][i] == 1 && dist[i] == INT_MAX) {
 				stack.push(i);
 				dist[i] = dist[v] + 1;
 			}
@@ -84,7 +123,7 @@ void DFSD(int v, int len, int* dist, int** G) {
 	}
 }
 
-void DFSD_list(int v, int len, int* dist, struct list * l) {
+void DFSD_list(int v, int len, int* dist, struct list* l) {
 	stack<int> stack;
 	stack.push(v);
 	dist[v] = 0;
@@ -93,8 +132,8 @@ void DFSD_list(int v, int len, int* dist, struct list * l) {
 		v = stack.top();
 		stack.pop();
 		cout << v + 1 << " ";
-		while(p){
-			if (dist[p->n - 1] == -1) {
+		while (p) {
+			if (dist[p->n - 1] == INT_MAX) {
 				stack.push(p->n - 1);
 				dist[p->n - 1] = dist[v] + 1;
 			}
@@ -110,9 +149,9 @@ void BFSD(int v, int len, int* dist, int** G) {
 	while (!q.empty()) {
 		v = q.front();
 		q.pop();
-		cout << v + 1 << " ";
+		//cout << v + 1 << " ";
 		for (int i = 0; i < len; i++) {
-			if (G[v][i] == 1 && dist[i] == -1) {
+			if (G[v][i] == 1 && dist[i] == INT_MAX) {
 				q.push(i);
 				dist[i] = dist[v] + 1;
 			}
@@ -129,37 +168,45 @@ int main() {
 	G = creatG(len);
 	printG(G, len);
 	dist = new int[len];
-	for (int i = 0; i < len; i++) dist[i] = -1;
+	for (int i = 0; i < len; i++) dist[i] = INT_MAX;
 	cout << "Введите вершину с которой начать обход: ";
 	cin >> start;
 	time_t st1 = clock();
+	cout << "Обход: ";
 	DFSD(start - 1, len, dist, G);
 	time_t end1 = clock();
 	cout << "\n";
+	cout << "\nРастояние до вершин:\n";
 	for (int i = 0; i < len; i++) {
-		cout << dist[i] << " ";
-		dist[i] = -1;
+		cout << i + 1 << ": ";
+		if (dist[i] == INT_MAX) cout << "пути нет\n";
+		else cout << dist[i] << "\n";
+		dist[i] = INT_MAX;
 	}
+	DFSD_ver(start - 1, len, dist, G);
 	list* l = new list[len];
-	cout << "\n\n";
+	cout << "\n\nСписки смежности:\n";
 	for (int i = 0; i < len; i++) {
 		for (int j = 0; j < len; j++) {
 			if (G[i][j] == 1) l[i].add(j + 1);
 		}
 		l[i].print(i + 1);
 	}
-	cout << "\n";
+	cout << "\nОбход: ";
 	DFSD_list(start - 1, len, dist, l);
 	cout << "\n";
+	cout << "\nРастояние до вершин:\n";
 	for (int i = 0; i < len; i++) {
-		cout << dist[i] << " ";
-		dist[i] = -1;
+		cout << i + 1 << ": ";
+		if (dist[i] == INT_MAX) cout << "пути нет\n";
+		else cout << dist[i] << "\n";
+		dist[i] = INT_MAX;
 	}
 	cout << "\n\n";
 	time_t st2 = clock();
 	BFSD(start - 1, len, dist, G);
 	time_t end2 = clock();
-	cout << "\n\nВремя выполнения на основе обхода в глубину: " << (end1 - st1) / 1000.0;
-	cout << "\nВремя выполнения на основе обхода в ширину: " << (end2 - st2) / 1000.0;
+	cout << "Время выполнения на основе обхода в глубину: " << (end1 - st1) / 1000.0;
+	cout << "\nВремя выполнения на основе обхода в ширину: " << (end2 - st2) / 1000.0 << "\n";
 	return 0;
 }
