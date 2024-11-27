@@ -58,7 +58,7 @@ void BFSD(int v, int len, int* dist, int** G) {
 	while (!q.empty()) {
 		v = q.front();
 		q.pop();
-		cout << v + 1 << " ";
+		//cout << v + 1 << " ";
 		for (int i = 0; i < len; i++) {
 			if (G[v][i] != 0 && dist[i] == -1) {
 				q.push(i);
@@ -85,23 +85,21 @@ void BFSD_orint(int v, int len, int* dist, int** G) {
 	}
 }
 
-void dist_print(int* dist, int len) {
-	int min = 2000, max = -2, *perif = new int[len], * centre = new int [len], size_min = 0, size_max = 0;
+void dist_print(int* e, int len) {
+	int min = 2000, max = -2, * perif = new int[len], * centre = new int[len], size_min = 0, size_max = 0;
 	for (int i = 0; i < len; i++) {
-		if (dist[i] != 0 && dist[i] != -1) {
-			if (dist[i] > max) max = dist[i];
-			if (dist[i] < min) min = dist[i];
-		}
-		cout << dist[i] << " ";
+		if (e[i] > max) max = e[i];
+		if (e[i] < min) min = e[i];
+		cout << e[i] << " ";
 	}
 	for (int i = 0; i < len; i++) {
-		if (dist[i] == max) { 
-			perif[size_max] = i + 1; 
-			size_max++; 
+		if (e[i] == max) {
+			perif[size_max] = i + 1;
+			size_max++;
 		}
-		if (dist[i] == min) {
-			centre[size_min] = i + 1; 
-			size_min++; 
+		if (e[i] == min) {
+			centre[size_min] = i + 1;
+			size_min++;
 		}
 	}
 	cout << "\nРадиус графа равер: " << min << "\nДиаметр графа равен: " << max << "\n";
@@ -111,12 +109,11 @@ void dist_print(int* dist, int len) {
 	cout << "\nПодмножество периферийных вершин равно: ";
 	if (size_max == 0) cout << "null";
 	for (int i = 0; i < size_max; i++) { cout << perif[i] << " "; }
-	for (int i = 0; i < len; i++) dist[i] = -1;
 }
 
 int main() {
 	setlocale(LC_ALL, "");
-	int** G, ** G_, len, * dist, start;
+	int** G, ** G_, len, * dist, start, *e;
 	cout << "Введите длину графа: ";
 	cin >> len;
 	G = creatG(len);
@@ -127,12 +124,24 @@ int main() {
 	cin >> start;
 	BFSD(start - 1, len, dist, G);
 	cout << "\n";
-	dist_print(dist, len);
-	cout << "\n\nОриентированный граф: \n";
+	for (int i = 0; i < len; i++) dist[i] = -1;
+	e = new int[len];
+	for (int i = 0; i < len; i++) {
+		BFSD(i, len, dist, G);
+		int max = -2;
+		for (int j = 0; j < len; j++) {
+			if (dist[j] > max) max = dist[j];
+		}
+		e[i] = max;
+		for (int i = 0; i < len; i++) dist[i] = -1;
+	}
+	cout << "\n";
+	dist_print(e, len);
+	/*cout << "\n\nОриентированный граф: \n";
 	G_ = creatG_orint(len);
 	printG(G_, len);
 	BFSD(start - 1, len, dist, G_);
 	cout << "\n";
-	dist_print(dist, len);
+	dist_print(dist, len);*/
 	return 0;
 }
