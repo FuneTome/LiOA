@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
 	BFSD(0, len, dist, G);
 	for (int i = 0; i < len; i++) { if (dist[i] == INT_MAX) dist[i] = 0; cout << dist[i] << " "; }
 	
-	/*cout << "\n";
+	cout << "\n";
 	for (int i = 0; i < len; i++) dist[i] = INT_MAX;
 	e = new int[len];
 	for (int i = 0; i < len; i++) {
@@ -118,6 +118,6 @@ int main(int argc, char* argv[]){
 		for (int i = 0; i < len; i++) dist[i] = INT_MAX;
 	}
 	cout << "\n";
-	dist_print(e, len);*/
+	dist_print(e, len);
 	return 0;
 }
