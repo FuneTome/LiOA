@@ -2,6 +2,7 @@
 #include <queue>
 #include <string>
 #include <Windows.h>
+#include <limits>
 using namespace std;
 
 int** creatG(int len, int p1, int p2) {
@@ -17,7 +18,7 @@ int** creatG(int len, int p1, int p2) {
 			else {
 				if (p1 == 1) G[i][j] = rand() % 10;
 				else G[i][j] = rand() % 2;
-				if(p2 == 1)	G[j][i] = G[i][j];
+				if(p2 == 0)	G[j][i] = G[i][j];
 				else {
 					if (rand() % 10 > 5) G[j][i] = G[i][j];
 					else G[j][i] = 0;
@@ -53,9 +54,9 @@ void BFSD(int v, int len, int* dist, int** G) {
 		q.pop();
 		//cout << v + 1 << " ";
 		for (int i = 0; i < len; i++) {
-			if (G[v][i] != 0 && dist[i] == -1) {
-				q.push(i);
+			if (G[v][i] != 0 && dist[v] + G[v][i] < dist[i]) {
 				dist[i] = dist[v] + G[v][i];
+				q.push(i);
 			}
 		}
 	}
@@ -90,29 +91,33 @@ void dist_print(int* e, int len) {
 int main(int argc, char* argv[]){
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-	if (argc == 1) print_info();
-	int p1 = stoi(argv[1]), p2 = stoi(argv[2]);
+	//if (argc == 1) print_info();
+	int p1 = 1/*stoi(argv[1])*/, p2 = 1/*stoi(argv[2])*/;
 	int** G, ** G_, len, * dist, *e;
 	cout << "Введите длину графа: ";
 	cin >> len;
 	G = creatG(len, p1, p2);
 	printG(G, len);
+
 	dist = new int[len];
-	for (int i = 0; i < len; i++) dist[i] = -1;
+	for (int i = 0; i < len; i++) dist[i] = INT_MAX;
 	BFSD(0, len, dist, G);
-	cout << "\n";
-	for (int i = 0; i < len; i++) dist[i] = -1;
+	for (int i = 0; i < len; i++) { if (dist[i] == INT_MAX) dist[i] = 0; cout << dist[i] << " "; }
+	
+	/*cout << "\n";
+	for (int i = 0; i < len; i++) dist[i] = INT_MAX;
 	e = new int[len];
 	for (int i = 0; i < len; i++) {
 		BFSD(i, len, dist, G);
 		int max = -2;
 		for (int j = 0; j < len; j++) {
+			if (dist[j] == INT_MAX) dist[j] = 0;
 			if (dist[j] > max) max = dist[j];
 		}
 		e[i] = max;
-		for (int i = 0; i < len; i++) dist[i] = -1;
+		for (int i = 0; i < len; i++) dist[i] = INT_MAX;
 	}
 	cout << "\n";
-	dist_print(e, len);
+	dist_print(e, len);*/
 	return 0;
 }
